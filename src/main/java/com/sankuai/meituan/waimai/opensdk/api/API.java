@@ -4,7 +4,6 @@ import com.sankuai.meituan.waimai.opensdk.constants.ErrorEnum;
 import com.sankuai.meituan.waimai.opensdk.constants.ParamRequiredEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
-import com.sankuai.meituan.waimai.opensdk.exception.ExceptionEnum;
 import com.sankuai.meituan.waimai.opensdk.factory.URLFactory;
 import com.sankuai.meituan.waimai.opensdk.util.ConvertUtil;
 import com.sankuai.meituan.waimai.opensdk.util.HttpUtil;
@@ -13,7 +12,8 @@ import com.sankuai.meituan.waimai.opensdk.util.SignGenerator;
 import com.sankuai.meituan.waimai.opensdk.util.StringUtil;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
 
-import org.apache.http.client.config.RequestConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -25,6 +25,9 @@ import java.util.Map;
  * Created by yangzhiqi on 15/10/19.
  */
 public class API {
+
+    static Logger log = LoggerFactory.getLogger(API.class);
+
     protected static String requestApi(String methodName,SystemParam systemParam,
                                        Map<String,String> applicationParamsMap) throws
                                                                                 ApiOpException,
@@ -44,7 +47,16 @@ public class API {
                                                URLFactory.genUrlType(methodName),
                                                PropertiesUtil.getRequestConfig());
 
-        return HttpUtil.httpResultHandler(resultString);
+        String rs = HttpUtil.httpResultHandler(resultString);
+
+        log.info("MTBEG********************************************************************************");
+        log.info("MT* 美团外卖接口调用:{} AppId:{} Url:{}",methodName,systemParam.getAppId(),urlPrefix);
+        log.info("MT* 接口参数：{}",applicationParamsMap);
+        log.info("MT* 响应内容：{}",resultString);
+        log.info("MT* Data结果：{}",rs);
+        log.info("MTEND********************************************************************************");
+
+        return rs;
     }
 
     protected static String requestApi(String methodName,SystemParam systemParam,
