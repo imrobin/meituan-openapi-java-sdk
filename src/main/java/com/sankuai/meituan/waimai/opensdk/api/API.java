@@ -32,6 +32,10 @@ public class API {
                                        Map<String,String> applicationParamsMap) throws
                                                                                 ApiOpException,
                                                                                 ApiSysException {
+        String urlPrefix = null;
+        String resultString = null;
+        String rs = null;
+        try{
         //组织系统级参数
         Map<String,String> systemParamsMap = ConvertUtil.convertSystemParamsToMap(systemParam);
         String urlForGenSig = URLFactory.genUrlForGenSig(methodName, systemParamsMap,
@@ -40,22 +44,22 @@ public class API {
         String sig = SignGenerator.genSig(urlForGenSig);
         //去掉scret的url
         String urlNoSig = urlForGenSig.replaceAll(systemParam.getAppSecret(), "");
-        String urlPrefix = URLFactory.genUrlPrefix(methodName);
-        String resultString = HttpUtil.request(urlPrefix,
+        urlPrefix = URLFactory.genUrlPrefix(methodName);
+        resultString = HttpUtil.request(urlPrefix,
                                                genUrlForGetRequest(urlPrefix, systemParamsMap, applicationParamsMap),
                                                sig, systemParamsMap, applicationParamsMap,
                                                URLFactory.genUrlType(methodName),
                                                PropertiesUtil.getRequestConfig());
 
-        String rs = HttpUtil.httpResultHandler(resultString);
-
-        log.info("MTBEG********************************************************************************");
-        log.info("MT* 美团外卖接口调用:{} AppId:{} Url:{}",methodName,systemParam.getAppId(),urlPrefix);
-        log.info("MT* 接口参数：{}",applicationParamsMap);
-        log.info("MT* 响应内容：{}",resultString);
-        log.info("MT* Data结果：{}",rs);
-        log.info("MTEND********************************************************************************");
-
+        rs = HttpUtil.httpResultHandler(resultString);
+        } finally {
+            log.info("MTBEG****************************************************************************");
+            log.info("MT* 美团外卖接口调用:{} AppId:{} Url:{}",methodName,systemParam.getAppId(),urlPrefix);
+            log.info("MT* 接口参数：{}",applicationParamsMap);
+            log.info("MT* 响应内容：{}",resultString);
+            log.info("MT* Data结果：{}",rs);
+            log.info("MTEND****************************************************************************");
+        }
         return rs;
     }
 
