@@ -20,6 +20,7 @@ import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -35,7 +36,17 @@ import java.util.Map;
  */
 public class HttpUtil {
 
-    private static CloseableHttpClient httpClient = HttpClients.custom().build();
+    private static CloseableHttpClient httpClient = HttpClients.createDefault();
+
+    static {
+        PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager();
+        poolingHttpClientConnectionManager.setMaxTotal(PropertiesUtil.getHttpClientPoolMaxTotal());
+        poolingHttpClientConnectionManager.setDefaultMaxPerRoute(PropertiesUtil.getHttpClientPoolDefaultMaxPerRoute());
+        poolingHttpClientConnectionManager.setMaxPerRoute(URLFactory.getRequestUrlRoute(), PropertiesUtil.getHttpClientPoolMaxPerRoute());
+        httpClient = HttpClients.custom()
+                .setConnectionManager(poolingHttpClientConnectionManager)
+                .build();
+    }
 
     public static String request(String urlPrefix,String urlHasParamsNoSig,String sig,Map<String, String> systemParamsMap,
                                  Map<String,String> applicationParamsMap,String requestMethodType,RequestConfig.Builder requestConfigBuilder )
@@ -70,12 +81,12 @@ public class HttpUtil {
     private static String requestOfPost(String url,Map<String,String> applicationParamsMap,RequestConfig.Builder requestConfigBuilder)
         throws ApiSysException{
         HttpPost httpPost = new HttpPost(url);
+        httpPost.setConfig(requestConfigBuilder.build());
         CloseableHttpResponse response = null;
         try {
             //设置参数
             List<BasicNameValuePair> nameValuePairList = ConvertUtil.convertToEntity(applicationParamsMap);
             UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(nameValuePairList,"UTF-8");
-            httpPost.setConfig(requestConfigBuilder.build());
             httpPost.setEntity(uefEntity);
             response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
@@ -87,8 +98,6 @@ public class HttpUtil {
             try {
                 if (response != null) {
                     response.close();
-                }else{
-                    throw new ApiSysException("请检查environment.properties文件是否配置正确");
                 }
             } catch (IOException e) {
                 throw new ApiSysException(e);
@@ -106,10 +115,11 @@ public class HttpUtil {
     private static String requestOfPost(String url,Map<String,String> applicationParamsMap, byte[] fileData,
                                         String imgName, RequestConfig.Builder requestConfigBuilder) throws ApiSysException{
         HttpPost httpPost = new HttpPost(url);
+        httpPost.setConfig(requestConfigBuilder.build());
         CloseableHttpResponse response = null;
         try {
             //设置参数
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            List<NameValuePair> nameValuePairs = new ArrayList<>();
             List<BasicNameValuePair> nameValuePairList = ConvertUtil.convertToEntity(applicationParamsMap);
             nameValuePairs.addAll(nameValuePairList);
 
@@ -135,8 +145,6 @@ public class HttpUtil {
             try {
                 if (response != null) {
                     response.close();
-                }else{
-                    throw new ApiSysException("请检查environment.properties文件是否配置正确");
                 }
             } catch (IOException e) {
                 throw new ApiSysException(e);
@@ -162,13 +170,10 @@ public class HttpUtil {
             throw new ApiSysException(e);
         }finally {
             try {
+                httpGet.releaseConnection();
                 if (response != null) {
                     response.close();
-                }else{
-                    throw new ApiSysException("请检查environment.properties文件是否配置正确");
                 }
-                httpGet.releaseConnection();
-                response.close();
             } catch (IOException e) {
                 throw new ApiSysException(e);
             }
@@ -177,56 +182,63 @@ public class HttpUtil {
     }
 
     public static String httpResultHandler(String httpResult) throws ApiOpException, ApiSysException{
-        if(httpResult == null || httpResult.equals("")){
+        return httpResultHandler(httpResult, false);
+    }
+
+    public static String httpResultHandler(String httpResult, boolean partSuccess) throws ApiOpException, ApiSysException{
+        if (httpResult == null || httpResult.equals("")) {
             throw new ApiSysException(ErrorEnum.SYS_ERR);
         }
         JSONObject resultObj = null;
-        try{
+        try {
             resultObj = JSONObject.parseObject(httpResult);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiSysException(ErrorEnum.SYS_ERR);
         }
-        if(resultObj == null || resultObj.get("data") == null){
+        if (resultObj == null || resultObj.get("data") == null) {
             throw new ApiSysException(ErrorEnum.SYS_ERR);
         }
 
         String dataStr = resultObj.get("data").toString();
-        if(dataStr.equals("ng") || dataStr.equalsIgnoreCase("null")) {
+        if (dataStr.equals("ng") || dataStr.equalsIgnoreCase("null")) {
             Object errObject = resultObj.get("error");
-            if(errObject == null || errObject.toString().equals("")
-               || errObject.toString().equalsIgnoreCase("null")){
+            if (errObject == null || errObject.toString().equals("")
+                    || errObject.toString().equalsIgnoreCase("null")) {
                 throw new ApiSysException(ErrorEnum.SYS_ERR);
             }
 
             JSONObject errJsonObject = null;
-            try{
+            try {
                 errJsonObject = JSONObject.parseObject(errObject.toString());
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ApiSysException(ErrorEnum.SYS_ERR);
             }
-            if(errJsonObject == null || errJsonObject.get("code") == null || errJsonObject.get("code").equals("")
-               || errJsonObject.get("code").toString().equalsIgnoreCase("null")){
+            if (errJsonObject == null || errJsonObject.get("code") == null || errJsonObject.get("code").equals("")
+                    || errJsonObject.get("code").toString().equalsIgnoreCase("null")) {
                 throw new ApiSysException(ErrorEnum.SYS_ERR);
             }
 
             Integer errorCode = null;
-            try{
+            try {
                 errorCode = Integer.parseInt(errJsonObject.get("code").toString());
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ApiSysException(ErrorEnum.SYS_ERR);
             }
-            if(errorCode == null){
+            if (errorCode == null) {
                 throw new ApiSysException(ErrorEnum.SYS_ERR);
-            }else{
-                if(errJsonObject.get("msg") == null || errJsonObject.get("msg").equals("")
-                   || errJsonObject.get("msg").toString().equalsIgnoreCase("null")){
+            } else {
+                if (errJsonObject.get("msg") == null || errJsonObject.get("msg").equals("")
+                        || errJsonObject.get("msg").toString().equalsIgnoreCase("null")) {
                     throw new ApiSysException(ErrorEnum.SYS_ERR);
-                }else{
+                } else {
                     String errorMsg = errJsonObject.get("msg").toString();
-                    throw new ApiOpException(errorCode.intValue(), errorMsg);
+                    throw new ApiOpException(errorCode, errorMsg);
                 }
 
             }
+        } else if (partSuccess && StringUtil.isNotBlank(resultObj.getString("msg"))){
+            // data=ok && msg not empty, is partSuccess, return msg; else return data.
+            dataStr = resultObj.getString("msg");
         }
         return dataStr;
     }

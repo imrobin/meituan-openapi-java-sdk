@@ -10,44 +10,50 @@ import java.util.List;
 public enum ParamRequiredEnum {
     SysParam("appId, appSecret, timestamp"),
     //门店
-    PoiSave("app_poi_code, name, address, latitude, longitude, phone, shipping_fee, shipping_time, "
-            + "open_level, is_online, third_tag_name"),
+    PoiSave("app_poi_code, name, address, latitude, longitude, phone, shipping_fee, shipping_time, open_level, is_online, third_tag_name"),
     PoiMGet("app_poi_codes"),
     PoiOPen("app_poi_code"),
     PoiClose("app_poi_code"),
     PoiOffline("app_poi_code, reason"),
     PoiOnline("app_poi_code"),
-    PoiQualifySave("app_poi_code, type, qualification_url"),
+    PoiQualifySave("app_poi_code, type, qualification_url"), // 已废弃
     PoiSendTimeSave("app_poi_codes, send_time"),
     PoiAdditionalSave("app_poi_code"),
     PoiUpdatePromotionInfo("app_poi_code"),
-    PoiUpdateShippingTime("app_poi_code"),
+    PoiUpdateShippingTime("app_poi_code, shipping_time"),
     PoiIsDelayPushLogistics("app_poi_code"),
-    PoiSetDelayPushLogistics("app_poi_code"),
-    PoiComment("app_poi_code"),
+    PoiSetDelayPushLogistics("app_poi_code, delay_seconds"),
+    PoiComment("app_poi_code, start_time, end_time, pageoffset, pagesize"),
+    PoiCommentAddReply("app_poi_code, comment_id, reply"),
+    PoiCommentScore("app_poi_code"),
 
     //配送
     ShippingSave("app_poi_code, app_shipping_code, type, area, min_price"),
     ShippingList("app_poi_code"),
     ShippingBatchSave("app_poi_code, shipping_data"),
+    ShippingFetch("app_poi_code"),
 
     //菜品
     FoodCatUpdate("app_poi_code, category_name"),
-    FoodCatList("app_poi_code"),
     FoodCatDelete("app_poi_code, category_name"),
+    FoodSave("app_poi_code, app_food_code"),
+    FoodInitData("app_poi_code, app_food_code, category_name"),
+    FoodDelete("app_poi_code, app_food_code"),
     FoodList("app_poi_code"),
     FoodListByPage("app_poi_code, offset, limit"),
-    FoodSave("app_poi_code, app_food_code"),
     FoodBatchSave("app_poi_code, food_data"),
-    FoodInitData("app_poi_code, app_food_code, category_name"),
     FoodBatchInitData("app_poi_code, food_data"),
-    FoodDelete("app_poi_code, app_food_code"),
+    FoodCatList("app_poi_code"),
     FoodSkuSave("app_poi_code, app_food_code, skus"),
     FoodSkuDelete("app_poi_code, app_food_code, sku_id"),
-    UpdateFoodSkuStock("app_poi_code, food_data"),
     UpdateFoodSkuPrice("app_poi_code, food_data"),
+    UpdateFoodSkuStock("app_poi_code, food_data"),
     incFoodSkuStock("app_poi_code, food_data"),
     descFoodSkuStock("app_poi_code, food_data"),
+    FoodBindProperty("app_poi_code, food_property"),
+    FoodPropertyList("app_poi_code, app_food_code"),
+    FoodGet("app_poi_code, app_food_code"),
+    FoodSkuSellStatusUpdate("app_poi_code, food_data, sell_status"),
 
 
 
@@ -56,23 +62,47 @@ public enum ParamRequiredEnum {
     MedicineCatUpdate("app_poi_code, category_code"),
     MedicineCatDelete("app_poi_code, category_code"),
     MedicineCatList("app_poi_code"),
-    MedicineList("app_poi_code"),
-    MedicineSave("app_poi_code, app_medicine_code, upc, medicine_no, spec, price, stock, "
-                 + "category_code, category_name, is_sold_out"),
-    MedicineBatchSave("app_poi_code, medicine_data"),
+    MedicineSave("app_poi_code, app_medicine_code, upc, medicine_no, spec, price, stock, category_code, category_name, is_sold_out"),
     MedicineUpdate("app_poi_code, app_medicine_code"),
+    MedicineBatchSave("app_poi_code, medicine_data"),
     MedicineBatchUpdate("app_poi_code, medicine_data"),
     MedicineDelete("app_poi_code, app_medicine_code"),
+    MedicineList("app_poi_code"),
     MedicineStock("app_poi_code, medicine_data"),
 
 
-    //图片
-    ImageUpload("app_poi_code, img_name"),
+    //零售
+    RetailCatUpdate("app_poi_code, category_name"),
+    RetailCatDelete("app_poi_code, category_name"),
+    RetailCatList("app_poi_code"),
+    RetailInitdata("app_poi_code, app_food_code, category_name"),
+    RetailList("app_poi_code"),
+    RetailListByPage("app_poi_code, offset, limit"),
+    RetailBatchInitdata("app_poi_code, food_data"),
+    UpdateRetailSkuPrice("app_poi_code, food_data"),
+    UpdateRetailSkuStock("app_poi_code, food_data"),
+    RetailGet("app_poi_code, app_food_code"),
+
+
+    //活动
+    ActDiscountBatchSave("app_poi_code, act_data"),
+    ActDiscountDelete("app_poi_code, app_food_codes"),
+    ActDiscountStock("app_poi_code, act_data"),
+    ActDiscountList("app_poi_code, offset, limit"),
+    ActDiscountActivityOrderLimit("app_poi_code, activity_order_limit"),
+
+    ActFullDiscountBatchSave("app_poi_code, act_info, act_details, app_foods"),
+    ActFullDiscountList("app_poi_code"),
+    ActFullDiscountDelete("app_poi_code, act_ids"),
+    ActFullDiscountFoodsBatchSave("app_poi_code, act_id, app_foods"),
+    ActFullDiscountFoodsList("app_poi_code, act_id, offset, limit"),
+    ActFullDiscountFoodsDelete("app_poi_code, act_id, app_foods"),
+    ActFullDiscountFoodsBatchUpdateDayLimit("app_poi_code, act_id, app_foods"),
 
 
     //订单
-    OrderConfirm("order_id"),
     OrderReceived("order_id"),
+    OrderConfirm("order_id"),
     OrderCancel("order_id, reason, reason_code"),
     OrderDelivering("order_id"),
     OrderArrived("order_id"),
@@ -85,12 +115,30 @@ public enum ParamRequiredEnum {
     OrderLogisticsPush("order_id"),
     OrderLogisticsCancel("order_id"),
     OrderLogisticsStatus("order_id"),
+    OrderGetDaySeq("app_poi_code"),
+    OrderGetOrderIdByDaySeq("app_poi_code, date_time, day_seq"),
     OrderZhongbaoShippingFee("order_ids"),
+    OrderZhongbaoDispatch("order_id, shipping_fee, tip_amount"),
     OrderPrepareZhongbaoDispatch("order_id"),
     OrderConfirmZhongbaoDispatch("order_id"),
-    OrderUpdateZhongbaoTip("order_id"),
-    OrderCommentOrder("order_id"),
-    OrderCommentAddReply("order_id");
+    OrderUpdateZhongbaoTip("order_id, tip_amount"),
+    OrderCommentOrder("order_id"), // 已废弃
+    OrderCommentAddReply("order_id, comment_id, reply"), // 已废弃
+    OrderGetPartRefundFoods("order_id"),
+    OrderApplyPartRefund("order_id, reason, food_data"),
+    OrderRemindReply("order_id, reply_id, reply_content,remind_id"),
+    OrderGetSupportedCompensation("app_poi_code, offset, limit"),
+    OrderApplyCompensation("order_id, apply_status, amount,reason"),
+    OrderGetCompensationResult("order_id"),
+    OrderBatchPullPhoneNumber("app_poi_code, offset, limit"),
+    OrderPreparationMealComplete("order_id"),
+    OrderGetPreparationMealTime("order_id"),
+    OrderBatchFetchAbnormalOrder("type, start_time, end_time, offset, limit"),
+    OrderChangeToPoiSelfShipping("order_id"),
+
+
+    //图片
+    ImageUpload("app_poi_code, img_name");
 
 
     private String paramNames;
@@ -106,7 +154,7 @@ public enum ParamRequiredEnum {
     public static List<String> getParams(ParamRequiredEnum paramRequiredEnum){
         String paramNames = paramRequiredEnum.getParamNames();
         List<String> paramNameListTemp = Arrays.asList(paramNames.split(","));
-        List<String> paramNameList = new ArrayList<String>();
+        List<String> paramNameList = new ArrayList<>();
         for(String paramName : paramNameListTemp){
             paramNameList.add(paramName.trim());
         }

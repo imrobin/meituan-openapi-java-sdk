@@ -7,6 +7,7 @@ import com.sankuai.meituan.waimai.opensdk.constants.PoiQualificationEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import com.sankuai.meituan.waimai.opensdk.util.ConvertUtil;
+import com.sankuai.meituan.waimai.opensdk.util.StringUtil;
 import com.sankuai.meituan.waimai.opensdk.vo.PoiParam;
 import com.sankuai.meituan.waimai.opensdk.vo.PoiTagParam;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
@@ -64,7 +65,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiMGet, systemParam, appPoiCodes);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_codes", appPoiCodes);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiMGet);
 
@@ -91,7 +92,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiOPen, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiOPen);
 
@@ -111,7 +112,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiClose, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiClose);
 
@@ -131,7 +132,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiOnline, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiOnline);
 
@@ -152,7 +153,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiOffline, systemParam, appPoiCode, reason);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("reason", reason);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiOffline);
@@ -173,17 +174,21 @@ public class PoiAPI extends API{
      * @param validDate 资质证照的有效期截止日, 必须符合yyyy-MM-dd的格式，type为1，2，3时需要传此字段，type为4时不需要
      * @param address 经营地址，type为1，2时需要传此字段，type为3，4时不需要
      * @param number 证照编号，type为1，2，3，4时都需要传此字段
+     *
      * @return
+     *
+     * @deprecated 2017-05-25起废弃此接口，资质证书上传请联系业务经理
      */
+    @Deprecated
     public String poiQualifySave(SystemParam systemParam, String appPoiCode, PoiQualificationEnum poiQualificationEnum,
                                  String qualificationUrl, String validDate, String address, String number)
         throws ApiOpException, ApiSysException {
-        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        /*String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.PoiQualifySave, systemParam, appPoiCode, poiQualificationEnum, qualificationUrl);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("type", String.valueOf(poiQualificationEnum.getType()));
         applicationParamsMap.put("qualification_url", qualificationUrl);
@@ -198,7 +203,8 @@ public class PoiAPI extends API{
         }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiQualifySave);
 
-        return requestApi(methodName, systemParam, applicationParamsMap);
+        return requestApi(methodName, systemParam, applicationParamsMap);*/
+        return "";
     }
 
     /**
@@ -215,7 +221,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiSendTimeSave, systemParam, appPoiCodes, sendTime);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_codes", appPoiCodes);
         applicationParamsMap.put("send_time", String.valueOf(sendTime));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiSendTimeSave);
@@ -232,23 +238,22 @@ public class PoiAPI extends API{
      * @param appOrgId 门店的法人企业（门店的财务结算等均由与之关联的结算企业信息决定，对接的三方需要提前将该值告诉美团对接商务）
      * @return
      */
-    public String poiAdditionalSave(SystemParam systemParam, String appPoiCode, String appPoiEmail,
-                                           String appBrandCode, String appOrgId) throws ApiOpException,
-                                                                                        ApiSysException {
+    public String poiAdditionalSave(SystemParam systemParam, String appPoiCode, String appPoiEmail, String appBrandCode, String appOrgId)
+            throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.PoiAdditionalSave, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
-        if (appPoiEmail != null && !"".equals(appPoiEmail) && !"null".equals(appPoiEmail) && !"NULL".equals(appPoiEmail)) {
+        if (StringUtil.isNotBlank(appPoiEmail)) {
             applicationParamsMap.put("app_poi_email", appPoiEmail);
         }
-        if (appBrandCode != null && !"".equals(appBrandCode) && !"null".equals(appBrandCode) && !"NULL".equals(appBrandCode)) {
+        if (StringUtil.isNotBlank(appBrandCode)) {
             applicationParamsMap.put("app_brand_code", appBrandCode);
         }
-        if (appOrgId != null && !"".equals(appOrgId) && !"null".equals(appOrgId) && !"NULL".equals(appOrgId)) {
+        if (StringUtil.isNotBlank(appOrgId)) {
             applicationParamsMap.put("app_org_id", appOrgId);
         }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiAdditionalSave);
@@ -270,9 +275,9 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiUpdatePromotionInfo, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
-        if (promotionInfo != null && !"".equals(promotionInfo) && !"null".equals(promotionInfo) && !"NULL".equals(promotionInfo)) {
+        if (StringUtil.isNotBlank(promotionInfo)) {
             applicationParamsMap.put("promotion_info", promotionInfo);
         }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiUpdatePromotionInfo);
@@ -316,7 +321,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiUpdateShippingTime, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("shipping_time", shippingTime);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiUpdateShippingTime);
@@ -339,7 +344,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiIsDelayPushLogistics, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiIsDelayPushLogistics);
 
@@ -362,7 +367,7 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiSetDelayPushLogistics, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("delay_seconds", String.valueOf(delaySeconds));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiSetDelayPushLogistics);
@@ -389,13 +394,64 @@ public class PoiAPI extends API{
         beforeMethod(ParamRequiredEnum.PoiComment, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("start_time", String.valueOf(startTime));
         applicationParamsMap.put("end_time", String.valueOf(endTime));
         applicationParamsMap.put("pageoffset", String.valueOf(pageoffset));
         applicationParamsMap.put("pagesize", String.valueOf(pagesize));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiComment);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 根据评价id添加商家回复
+     *
+     * @param systemParam 系统级参数
+     * @param appPoiCode  门店code
+     * @param commentId   评论id
+     * @param reply       回复内容
+     * @return
+     *
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String poiCommentAddReply(SystemParam systemParam, String appPoiCode, long commentId, String reply) throws ApiOpException,
+            ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.PoiCommentAddReply, systemParam, appPoiCode);
+
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", appPoiCode);
+        applicationParamsMap.put("comment_id", String.valueOf(commentId));
+        applicationParamsMap.put("reply", reply);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiCommentAddReply);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 通过门店ID获取当前门店评分
+     *
+     * @param systemParam
+     * @param appPoiCode
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String poiCommentScore(SystemParam systemParam, String appPoiCode) throws ApiOpException,
+            ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.PoiCommentScore, systemParam, appPoiCode);
+
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", appPoiCode);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.PoiCommentScore);
 
         return requestApi(methodName, systemParam, applicationParamsMap);
     }

@@ -20,6 +20,7 @@ public class OrderDetailParam {
     private List<OrderExtraParam> extras;
     private Integer has_invoiced;
     private String invoice_title;
+    private String taxpayer_id;
     private Boolean is_favorites;
     private Boolean is_poi_first_order;
     private Integer is_pre;                     // 是否是预订单，推单时不会推送此字段
@@ -182,6 +183,14 @@ public class OrderDetailParam {
 
     public void setInvoice_title(String invoice_title) {
         this.invoice_title = invoice_title;
+    }
+
+    public String getTaxpayer_id() {
+        return taxpayer_id;
+    }
+
+    public void setTaxpayer_id(String taxpayer_id) {
+        this.taxpayer_id = taxpayer_id;
     }
 
     public Boolean getIs_favorites() {
@@ -609,6 +618,7 @@ public class OrderDetailParam {
                 ", extras=" + extras +
                 ", has_invoiced=" + has_invoiced +
                 ", invoice_title='" + invoice_title + '\'' +
+                ", taxpayer_id='" + taxpayer_id + '\'' +
                 ", is_favorites=" + is_favorites +
                 ", is_poi_first_order=" + is_poi_first_order +
                 ", is_pre=" + is_pre +

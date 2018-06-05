@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.sankuai.meituan.waimai.opensdk.constants.ErrorEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -22,7 +21,7 @@ public class ConvertUtil {
      * @return
      */
     public static Map<String,String> convertToMap(Object object) throws ApiSysException{
-        Map<String,String> resultMap = new HashMap<String, String>();
+        Map<String,String> resultMap = new HashMap<>();
         try{
             Field[] fields = object.getClass().getDeclaredFields();
             for (Field field : fields){
@@ -51,7 +50,7 @@ public class ConvertUtil {
      * @return
      */
     public static Map<String,String> convertSystemParamsToMap(SystemParam systemParam){
-        Map<String,String> resultMap = new HashMap<String, String>();
+        Map<String,String> resultMap = new HashMap<>();
         resultMap.put("timestamp",String.valueOf(System.currentTimeMillis() / 1000));
         resultMap.put("app_id",systemParam.getAppId());
         resultMap.put("appSecret",systemParam.getAppSecret());
@@ -65,17 +64,12 @@ public class ConvertUtil {
      */
     public static List<BasicNameValuePair> convertToEntity(Map<String,String> applicationParamsMap)
         throws ApiSysException{
-        List<BasicNameValuePair> formParam = new ArrayList<BasicNameValuePair>();
+        List<BasicNameValuePair> formParam = new ArrayList<>();
         try{
             if(applicationParamsMap != null){
-                Iterator<Map.Entry<String, String>> iterator = applicationParamsMap.entrySet().iterator();
-                while (iterator.hasNext()){
-                    Map.Entry<String, String> entry = iterator.next();
-                    if(entry.getValue() != null && !"".equals(entry.getValue()) &&
-                       !"null".equals(entry.getValue()) && !"NULL".equals(entry.getValue())) {
-                        BasicNameValuePair nameValuePair = new BasicNameValuePair(entry.getKey(), entry.getValue());
-                        formParam.add(nameValuePair);
-                    }
+                for (Map.Entry<String, String> entry : applicationParamsMap.entrySet()) {
+                    BasicNameValuePair nameValuePair = new BasicNameValuePair(entry.getKey(), entry.getValue());
+                    formParam.add(nameValuePair);
                 }
             }
         }catch (Exception e){
@@ -92,7 +86,7 @@ public class ConvertUtil {
      */
     public static List<NameValuePair> convertToEntityBasic(Map<String,String> applicationParamsMap)
         throws ApiSysException{
-        List<NameValuePair> formParam = new ArrayList<NameValuePair>();
+        List<NameValuePair> formParam = new ArrayList<>();
         try{
             if(applicationParamsMap != null){
                 Iterator<Map.Entry<String, String>> iterator = applicationParamsMap.entrySet().iterator();

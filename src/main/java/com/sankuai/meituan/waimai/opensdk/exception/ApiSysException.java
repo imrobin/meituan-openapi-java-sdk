@@ -33,6 +33,8 @@ public class ApiSysException extends Exception {
 
     @Override
     public String toString() {
-        return super.toString() + " " + exceptionEnum.toString();
+        return "ApiSysException [" +
+                "exceptionEnum=" + exceptionEnum +
+                "] " + super.toString();
     }
 }

@@ -6,7 +6,9 @@ import com.sankuai.meituan.waimai.opensdk.constants.ParamRequiredEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import com.sankuai.meituan.waimai.opensdk.util.ConvertUtil;
-import com.sankuai.meituan.waimai.opensdk.vo.*;
+import com.sankuai.meituan.waimai.opensdk.vo.MedicineCatParam;
+import com.sankuai.meituan.waimai.opensdk.vo.MedicineParam;
+import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +71,7 @@ public class MedicineAPI extends API {
         beforeMethod(null,systemParam, appPoiCode, categoryCode);
 
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("category_code", categoryCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.MedicineCatDelete);
@@ -89,7 +91,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineCatList, systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
 
 
@@ -149,7 +151,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineBatchSave,systemParam, appPoiCode, JSONObject.toJSONString(medicineParams));
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("medicine_data", JSONObject.toJSONString(medicineParams));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.MedicineBatchSave);
@@ -170,7 +172,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineBatchUpdate,systemParam, appPoiCode, JSONObject.toJSONString(medicineParams));
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("medicine_data", JSONObject.toJSONString(medicineParams));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.MedicineBatchUpdate);
@@ -192,7 +194,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineDelete,systemParam, appPoiCode,appMedicineCode);
 
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("app_medicine_code", appMedicineCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.MedicineDelete);
@@ -213,7 +215,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineList,systemParam, appPoiCode);
 
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
 
 
@@ -237,7 +239,7 @@ public class MedicineAPI extends API {
         beforeMethod(ParamRequiredEnum.MedicineStock,systemParam, appPoiCode, medicine_data);
 
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("medicine_data", medicine_data);
 

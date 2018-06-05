@@ -6,6 +6,7 @@ import com.sankuai.meituan.waimai.opensdk.constants.ErrorEnum;
 import com.sankuai.meituan.waimai.opensdk.constants.ParamRequiredEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
+import com.sankuai.meituan.waimai.opensdk.util.StringUtil;
 import com.sankuai.meituan.waimai.opensdk.vo.ShippingParam;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
 
@@ -31,22 +32,18 @@ public class ShippingAPI extends API {
      *                        坐标系需要转换，配送范围坐标需要乘以一百万)
      * @param minPrice        该配送区域的起送价
      * @param shipping_fee    该配送区域的配送费(建议填写这个字段设定配送费,如果此字段为空,则以门店保存的配送费为准)
-
      */
-    public String shippingSave(SystemParam systemParam, String appPoiCode,
-                                      String appShippingCode,
-                                      String type, String area, String minPrice, String shipping_fee)
-        throws ApiOpException,
-               ApiSysException {
+    public String shippingSave(SystemParam systemParam, String appPoiCode, String appShippingCode, String type, String area, String minPrice,
+                               String shipping_fee) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
-        Map<String, String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("app_shipping_code", appShippingCode);
         applicationParamsMap.put("type", type);
         applicationParamsMap.put("area", area);
         applicationParamsMap.put("min_price", minPrice);
-        if (shipping_fee != null && !"".equals(shipping_fee) && !"null".equals(shipping_fee) && !"NULL".equals(shipping_fee)) {
+        if (StringUtil.isNotBlank(shipping_fee)) {
             applicationParamsMap.put("shipping_fee", shipping_fee);
         }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ShippingSave);
@@ -55,24 +52,24 @@ public class ShippingAPI extends API {
     }
 
     /**
-     * 获取门店配送范围
-     * @param systemParam  系统参数
+     * 获取门店配送范围(混合送使用{@link #shippingFetch(SystemParam, String)})
+     *
+     * @param systemParam 系统参数
      * @param appPoiCode  门店code
      * @return
      */
-    public List<ShippingParam> shippingList(SystemParam systemParam, String appPoiCode)
-        throws ApiOpException, ApiSysException {
+    public List<ShippingParam> shippingList(SystemParam systemParam, String appPoiCode) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ShippingList);
 
         String data = requestApi(methodName, systemParam, applicationParamsMap);
         List<ShippingParam> shippingParams = null;
-        try{
+        try {
             shippingParams = JSONArray.parseArray(data, ShippingParam.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiSysException(ErrorEnum.SYS_ERR);
         }
         return shippingParams;
@@ -80,21 +77,47 @@ public class ShippingAPI extends API {
 
     /**
      * 批量创建/更新配送范围
-     * @param systemParam  系统参数
+     *
+     * @param systemParam 系统参数
      * @param appPoiCode  门店code
      * @return
      */
-    public String shippingBatchSave(SystemParam systemParam, String appPoiCode,
-                                                        List<ShippingParam> shippingParams)
-        throws ApiOpException, ApiSysException {
+    public String shippingBatchSave(SystemParam systemParam, String appPoiCode, List<ShippingParam> shippingParams) throws ApiOpException,
+            ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.ShippingBatchSave, systemParam, appPoiCode, shippingParams.toArray());
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("shipping_data", JSONObject.toJSONString(shippingParams));
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ShippingBatchSave);
 
         return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 获取门店配送范围及对应配送方式(只支持查询混合送门店)
+     *
+     * @param systemParam 系统参数
+     * @param appPoiCode  门店code
+     * @return
+     */
+    public List<ShippingParam> shippingFetch(SystemParam systemParam, String appPoiCode) throws ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", appPoiCode);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ShippingFetch);
+
+        String data = requestApi(methodName, systemParam, applicationParamsMap);
+        List<ShippingParam> shippingParams;
+        try {
+            shippingParams = JSONArray.parseArray(data, ShippingParam.class);
+        } catch (Exception e) {
+            throw new ApiSysException("解析返回的json数据异常", e);
+        }
+        return shippingParams;
     }
 
 }

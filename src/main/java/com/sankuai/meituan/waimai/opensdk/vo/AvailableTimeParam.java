@@ -4,13 +4,13 @@ package com.sankuai.meituan.waimai.opensdk.vo;
  * Created by zhangzhidong on 15/10/28.
  */
 public class AvailableTimeParam {
-    String monday;
-    String tuesday;
-    String wednesday;
-    String thursday;
-    String friday;
-    String saturday;
-    String sunday;
+    private String monday;
+    private String tuesday;
+    private String wednesday;
+    private String thursday;
+    private String friday;
+    private String saturday;
+    private String sunday;
 
     public AvailableTimeParam(String time){
         this.monday = time;
@@ -49,62 +49,75 @@ public class AvailableTimeParam {
         return monday;
     }
 
-    public void setMonday(String monday) {
+    public AvailableTimeParam setMonday(String monday) {
         this.monday = monday;
+        return this;
     }
 
     public String getTuesday() {
         return tuesday;
     }
 
-    public void setTuesday(String tuesday) {
+    public AvailableTimeParam setTuesday(String tuesday) {
         this.tuesday = tuesday;
+        return this;
     }
 
     public String getWednesday() {
         return wednesday;
     }
 
-    public void setWednesday(String wednesday) {
+    public AvailableTimeParam setWednesday(String wednesday) {
         this.wednesday = wednesday;
+        return this;
     }
 
     public String getThursday() {
         return thursday;
     }
 
-    public void setThursday(String thursday) {
+    public AvailableTimeParam setThursday(String thursday) {
         this.thursday = thursday;
+        return this;
     }
 
     public String getFriday() {
         return friday;
     }
 
-    public void setFriday(String friday) {
+    public AvailableTimeParam setFriday(String friday) {
         this.friday = friday;
+        return this;
     }
 
     public String getSaturday() {
         return saturday;
     }
 
-    public void setSaturday(String saturday) {
+    public AvailableTimeParam setSaturday(String saturday) {
         this.saturday = saturday;
+        return this;
     }
 
     public String getSunday() {
         return sunday;
     }
 
-    public void setSunday(String sunday) {
+    public AvailableTimeParam setSunday(String sunday) {
         this.sunday = sunday;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "monday:" +monday + "," + "tuesday:" +  tuesday + ","  + "wednesday:" + wednesday + ","
-               + "thursday:" + thursday + "," + "friday:" + friday + "," + "saturday:" + saturday + ","
-               + "sunday:" + sunday;
+        return "AvailableTimeParam [" +
+                "monday='" + monday + '\'' +
+                ", tuesday='" + tuesday + '\'' +
+                ", wednesday='" + wednesday + '\'' +
+                ", thursday='" + thursday + '\'' +
+                ", friday='" + friday + '\'' +
+                ", saturday='" + saturday + '\'' +
+                ", sunday='" + sunday + '\'' +
+                ']';
     }
 }

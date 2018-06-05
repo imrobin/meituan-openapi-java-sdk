@@ -5,11 +5,7 @@ import com.sankuai.meituan.waimai.opensdk.constants.ParamRequiredEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import com.sankuai.meituan.waimai.opensdk.factory.URLFactory;
-import com.sankuai.meituan.waimai.opensdk.util.ConvertUtil;
-import com.sankuai.meituan.waimai.opensdk.util.HttpUtil;
-import com.sankuai.meituan.waimai.opensdk.util.PropertiesUtil;
-import com.sankuai.meituan.waimai.opensdk.util.SignGenerator;
-import com.sankuai.meituan.waimai.opensdk.util.StringUtil;
+import com.sankuai.meituan.waimai.opensdk.util.*;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
 
 import org.slf4j.Logger;

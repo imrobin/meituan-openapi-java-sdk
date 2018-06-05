@@ -7,7 +7,6 @@ import com.sankuai.meituan.waimai.opensdk.util.FileUtil;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
 
 import java.io.File;
-import java.nio.file.attribute.FileOwnerAttributeView;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class ImageApi extends API {
         beforeMethod(null,systemParam, appPoiCode, String.valueOf(imgDatas),imgName);
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("img_name", imgName);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ImageUpload);
@@ -66,7 +65,7 @@ public class ImageApi extends API {
         }
 
         //组织应用级参数
-        Map<String,String> applicationParamsMap = new HashMap<String, String>();
+        Map<String,String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("app_poi_code", appPoiCode);
         applicationParamsMap.put("img_name", imgName);
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.ImageUpload);

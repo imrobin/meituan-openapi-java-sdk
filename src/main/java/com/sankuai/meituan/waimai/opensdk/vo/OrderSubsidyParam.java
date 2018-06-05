@@ -6,41 +6,54 @@ import java.util.List;
  * Created by zhangzhidong on 15/10/28.
  */
 public class OrderSubsidyParam {
-    String order_id;
-    String order_total;
-    String subsidy;
-    List<OrderSubsidyExtraParam> extras;
+    private Long order_id;
+    private Float order_total;
+    private Float subsidy;
+    private List<OrderSubsidyExtraParam> extras;
+
+    public Long getOrder_id() {
+        return order_id;
+    }
+
+    public OrderSubsidyParam setOrder_id(Long order_id) {
+        this.order_id = order_id;
+        return this;
+    }
+
+    public Float getOrder_total() {
+        return order_total;
+    }
+
+    public OrderSubsidyParam setOrder_total(Float order_total) {
+        this.order_total = order_total;
+        return this;
+    }
+
+    public Float getSubsidy() {
+        return subsidy;
+    }
+
+    public OrderSubsidyParam setSubsidy(Float subsidy) {
+        this.subsidy = subsidy;
+        return this;
+    }
 
     public List<OrderSubsidyExtraParam> getExtras() {
         return extras;
     }
 
-    public void setExtras(
-        List<OrderSubsidyExtraParam> extras) {
+    public OrderSubsidyParam setExtras(List<OrderSubsidyExtraParam> extras) {
         this.extras = extras;
+        return this;
     }
 
-    public String getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(String order_id) {
-        this.order_id = order_id;
-    }
-
-    public String getOrder_total() {
-        return order_total;
-    }
-
-    public void setOrder_total(String order_total) {
-        this.order_total = order_total;
-    }
-
-    public String getSubsidy() {
-        return subsidy;
-    }
-
-    public void setSubsidy(String subsidy) {
-        this.subsidy = subsidy;
+    @Override
+    public String toString() {
+        return "OrderSubsidyParam [" +
+                "order_id=" + order_id +
+                ", order_total=" + order_total +
+                ", subsidy=" + subsidy +
+                ", extras=" + extras +
+                ']';
     }
 }

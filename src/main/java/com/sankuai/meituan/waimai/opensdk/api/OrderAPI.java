@@ -6,6 +6,7 @@ import com.sankuai.meituan.waimai.opensdk.constants.ErrorEnum;
 import com.sankuai.meituan.waimai.opensdk.constants.ParamRequiredEnum;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
+import com.sankuai.meituan.waimai.opensdk.util.StringUtil;
 import com.sankuai.meituan.waimai.opensdk.vo.*;
 
 import java.util.HashMap;
@@ -24,8 +25,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public String orderReceived(SystemParam systemParam, Long orderId)
-            throws ApiOpException, ApiSysException {
+    public String orderReceived(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
@@ -42,8 +42,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public String orderConfirm(SystemParam systemParam, Long orderId)
-            throws ApiOpException, ApiSysException {
+    public String orderConfirm(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
@@ -62,9 +61,7 @@ public class OrderAPI extends API {
      * @param reasonCode  取消原因code, 通过取消订单原因列表接口方法获取
      * @return
      */
-    public String orderCancel(SystemParam systemParam, Long orderId, String reason,
-                              String reasonCode)
-            throws ApiOpException, ApiSysException {
+    public String orderCancel(SystemParam systemParam, Long orderId, String reason, String reasonCode) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
@@ -85,18 +82,17 @@ public class OrderAPI extends API {
      * @param courierPhone 配送电话
      * @return
      */
-    public String orderDelivering(SystemParam systemParam, Long orderId, String courierName,
-                                  String courierPhone)
-            throws ApiOpException, ApiSysException {
+    public String orderDelivering(SystemParam systemParam, Long orderId, String courierName, String courierPhone) throws ApiOpException,
+            ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("order_id", String.valueOf(orderId));
-        if (courierName != null && !"".equals(courierName) && !"null".equals(courierName) && !"NULL".equals(courierName)) {
+        if (StringUtil.isNotBlank(courierName)) {
             applicationParamsMap.put("courier_name", courierName);
         }
-        if (courierPhone != null && !"".equals(courierPhone) && !"null".equals(courierPhone) && !"NULL".equals(courierPhone)) {
-            applicationParamsMap.put("courier_name", courierName);
+        if (StringUtil.isNotBlank(courierPhone)) {
+            applicationParamsMap.put("courier_phone", courierPhone);
         }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderDelivering);
 
@@ -110,8 +106,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public String orderArrived(SystemParam systemParam, Long orderId) throws ApiOpException,
-            ApiSysException {
+    public String orderArrived(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
@@ -129,8 +124,7 @@ public class OrderAPI extends API {
      * @param reason      确认退款详情
      * @return
      */
-    public String orderRefundAgree(SystemParam systemParam, Long orderId, String reason)
-            throws ApiOpException, ApiSysException {
+    public String orderRefundAgree(SystemParam systemParam, Long orderId, String reason) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderRefundAgree, systemParam, orderId, reason);
@@ -152,8 +146,7 @@ public class OrderAPI extends API {
      * @param reason      驳回退款详情
      * @return
      */
-    public String orderRefundReject(SystemParam systemParam, Long orderId, String reason)
-            throws ApiOpException, ApiSysException {
+    public String orderRefundReject(SystemParam systemParam, Long orderId, String reason) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderRefundReject, systemParam, orderId, reason);
@@ -174,8 +167,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public OrderSubsidyParam orderSubsidy(SystemParam systemParam, Long orderId) throws ApiOpException,
-            ApiSysException {
+    public OrderSubsidyParam orderSubsidy(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderSubsidy, systemParam, orderId);
@@ -202,8 +194,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public Integer orderViewStatus(SystemParam systemParam, Long orderId)
-            throws ApiOpException, ApiSysException {
+    public Integer orderViewStatus(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderViewStatus, systemParam, orderId);
@@ -231,8 +222,7 @@ public class OrderAPI extends API {
      * @param actDetailId 活动ID
      * @return
      */
-    public PoiPolicyParam orderGetActDetailByAcId(SystemParam systemParam, int actDetailId)
-            throws ApiOpException, ApiSysException {
+    public PoiPolicyParam orderGetActDetailByAcId(SystemParam systemParam, int actDetailId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderGetActDetailByAcId, systemParam, actDetailId);
@@ -260,8 +250,7 @@ public class OrderAPI extends API {
      * @param isMtLogistics 是否为美团配送（当需要查询美团配送的详细信息时此字段需要为1）
      * @return
      */
-    public OrderDetailParam orderGetOrderDetail(SystemParam systemParam, long orderId, long isMtLogistics)
-            throws ApiOpException, ApiSysException {
+    public OrderDetailParam orderGetOrderDetail(SystemParam systemParam, long orderId, Long isMtLogistics) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderGetOrderDetail, systemParam, orderId, isMtLogistics);
@@ -269,6 +258,9 @@ public class OrderAPI extends API {
         //组织应用级参数
         Map<String, String> applicationParamsMap = new HashMap<>();
         applicationParamsMap.put("order_id", String.valueOf(orderId));
+        if (StringUtil.isNotBlank(isMtLogistics)) {
+            applicationParamsMap.put("is_mt_logistics", String.valueOf(isMtLogistics));
+        }
         beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetOrderDetail);
 
         String data = requestApi(methodName, systemParam, applicationParamsMap);
@@ -291,8 +283,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public String orderLogisticsPush(SystemParam systemParam, long orderId) throws ApiOpException,
-            ApiSysException {
+    public String orderLogisticsPush(SystemParam systemParam, long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderLogisticsPush, systemParam, orderId);
@@ -312,8 +303,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public String orderLogisticsCancel(SystemParam systemParam, long orderId) throws ApiOpException,
-            ApiSysException {
+    public String orderLogisticsCancel(SystemParam systemParam, long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderLogisticsCancel, systemParam, orderId);
@@ -333,8 +323,7 @@ public class OrderAPI extends API {
      * @param orderId     订单id
      * @return
      */
-    public LogisticsParam orderLogisticsStatus(SystemParam systemParam, long orderId)
-            throws ApiOpException, ApiSysException {
+    public LogisticsParam orderLogisticsStatus(SystemParam systemParam, long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderLogisticsStatus, systemParam, orderId);
@@ -355,6 +344,69 @@ public class OrderAPI extends API {
     }
 
     /**
+     * 获取最新日订单流水号
+     *
+     * @param systemParam 系统参数
+     * @param appPoiCode  门店code
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public Long orderGetDaySeq(SystemParam systemParam, String appPoiCode) throws ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetDaySeq, systemParam, appPoiCode);
+
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", appPoiCode);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetDaySeq);
+
+        String data = requestApi(methodName, systemParam, applicationParamsMap);
+        Long daySeq = null;
+        try {
+            daySeq = JSONObject.parseObject(data).getLong("day_seq");
+        } catch (Exception e) {
+            throw new ApiSysException(ErrorEnum.SYS_ERR);
+        }
+        return daySeq;
+    }
+
+    /**
+     * 根据日订单流水号获取订单ID
+     *
+     * @param systemParam 系统参数
+     * @param appPoiCode  门店code
+     * @param dateTime    日期，整型数据(eg: 20151201)
+     * @param daySeq      订单流水号
+     * @return 订单号
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public Long orderGetOrderIdByDaySeq(SystemParam systemParam, String appPoiCode, Integer dateTime, Integer daySeq) throws ApiOpException,
+            ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetOrderIdByDaySeq, systemParam, appPoiCode, dateTime, daySeq);
+
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", appPoiCode);
+        applicationParamsMap.put("date_time", String.valueOf(dateTime));
+        applicationParamsMap.put("day_seq", String.valueOf(daySeq));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetOrderIdByDaySeq);
+
+        String data = requestApi(methodName, systemParam, applicationParamsMap);
+        Long orderId = null;
+        try {
+            orderId = JSONObject.parseObject(data).getLong("order_id");
+        } catch (Exception e) {
+            throw new ApiSysException(ErrorEnum.SYS_ERR);
+        }
+        return orderId;
+    }
+
+    /**
      * 批量查询众包配送费
      *
      * @param systemParam
@@ -363,8 +415,8 @@ public class OrderAPI extends API {
      * @throws ApiOpException
      * @throws ApiSysException
      */
-    public List<OrderZhongbaoShippingFeeParam> orderZhongbaoShippingFee(SystemParam systemParam, String orderIds)
-            throws ApiOpException, ApiSysException {
+    public List<OrderZhongbaoShippingFeeParam> orderZhongbaoShippingFee(SystemParam systemParam, String orderIds) throws ApiOpException,
+            ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderZhongbaoShippingFee, systemParam, orderIds);
@@ -384,6 +436,32 @@ public class OrderAPI extends API {
     }
 
     /**
+     * 众包发配送
+     *
+     * @param systemParam 系统参数
+     * @param orderId     订单号
+     * @param shippingFee 配送费
+     * @param tipAmount   小费金额
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderZhongbaoDispatch(SystemParam systemParam, long orderId, double shippingFee, double tipAmount) throws ApiOpException,
+            ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderZhongbaoDispatch, systemParam, orderId);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", String.valueOf(orderId));
+        applicationParamsMap.put("shipping_fee", String.valueOf(shippingFee));
+        applicationParamsMap.put("tip_amount", String.valueOf(tipAmount));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderPrepareZhongbaoDispatch);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
      * 众包配送预下单
      *
      * @param systemParam
@@ -393,9 +471,11 @@ public class OrderAPI extends API {
      * @return
      * @throws ApiOpException
      * @throws ApiSysException
+     * @deprecated 与 {@link #orderZhongbaoDispatchConfirm}统一合并为{@link #orderZhongbaoDispatch}
      */
-    public String orderZhongbaoDispatchPrepare(SystemParam systemParam, long orderId, double oldShippingFee, double tipAmount)
-            throws ApiOpException, ApiSysException {
+    @Deprecated
+    public String orderZhongbaoDispatchPrepare(SystemParam systemParam, long orderId, double oldShippingFee, double tipAmount) throws
+            ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderPrepareZhongbaoDispatch, systemParam, orderId);
@@ -418,9 +498,10 @@ public class OrderAPI extends API {
      * @return
      * @throws ApiOpException
      * @throws ApiSysException
+     * @deprecated 与 {@link #orderZhongbaoDispatchPrepare}统一合并为{@link #orderZhongbaoDispatch}
      */
-    public String orderZhongbaoDispatchConfirm(SystemParam systemParam, long orderId, double tipAmount)
-            throws ApiOpException, ApiSysException {
+    @Deprecated
+    public String orderZhongbaoDispatchConfirm(SystemParam systemParam, long orderId, double tipAmount) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderConfirmZhongbaoDispatch, systemParam, orderId);
@@ -443,8 +524,7 @@ public class OrderAPI extends API {
      * @throws ApiOpException
      * @throws ApiSysException
      */
-    public String orderZhongbaoUpdateTip(SystemParam systemParam, long orderId, double tipAmount)
-            throws ApiOpException, ApiSysException {
+    public String orderZhongbaoUpdateTip(SystemParam systemParam, long orderId, double tipAmount) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderUpdateZhongbaoTip, systemParam, orderId);
@@ -465,9 +545,10 @@ public class OrderAPI extends API {
      * @return
      * @throws ApiOpException
      * @throws ApiSysException
+     * @deprecated {@date 2017-09-19}起废弃此接口，不再提供与订单有关的评论接口
      */
-    public String orderCommentOrder(SystemParam systemParam, long orderId)
-            throws ApiOpException, ApiSysException {
+    @Deprecated
+    public String orderCommentOrder(SystemParam systemParam, long orderId) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderCommentOrder, systemParam, orderId);
@@ -489,9 +570,10 @@ public class OrderAPI extends API {
      * @return
      * @throws ApiOpException
      * @throws ApiSysException
+     * @deprecated {@date 2017-09-19}起废弃此接口，不再提供与订单有关的评论接口
      */
-    public String orderCommentAddReply(SystemParam systemParam, long orderId, long commentId, String reply)
-            throws ApiOpException, ApiSysException {
+    @Deprecated
+    public String orderCommentAddReply(SystemParam systemParam, long orderId, long commentId, String reply) throws ApiOpException, ApiSysException {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.OrderCommentAddReply, systemParam, orderId);
@@ -505,4 +587,285 @@ public class OrderAPI extends API {
         return requestApi(methodName, systemParam, applicationParamsMap);
     }
 
+    /**
+     * 查询部分退款菜品详情
+     *
+     * @param systemParam 系统参数
+     * @param orderId     订单号
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public List<FoodPartRefundParam> orderGetPartRefundFoods(SystemParam systemParam, Long orderId) throws ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetPartRefundFoods, systemParam, orderId);
+
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", String.valueOf(orderId));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetPartRefundFoods);
+
+        String data = requestApi(methodName, systemParam, applicationParamsMap);
+
+        List<FoodPartRefundParam> foodPartRefundParams = null;
+        try {
+            foodPartRefundParams = JSONArray.parseArray(data, FoodPartRefundParam.class);
+        } catch (Exception e) {
+            throw new ApiSysException(ErrorEnum.SYS_ERR);
+        }
+        return foodPartRefundParams;
+    }
+
+    /**
+     * 申请部分退款
+     *
+     * @param systemParam          系统参数
+     * @param orderId              订单号
+     * @param reason               申请部分退款原因
+     * @param foodPartRefundParams 退款菜品
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderApplyPartRefund(SystemParam systemParam, Long orderId, String reason, List<FoodPartRefundParam> foodPartRefundParams) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderApplyPartRefund, systemParam, orderId, reason, foodPartRefundParams);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", String.valueOf(orderId));
+        applicationParamsMap.put("reason", reason);
+        applicationParamsMap.put("food_data", JSONArray.toJSONString(foodPartRefundParams));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderApplyPartRefund);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 催单回复
+     *
+     * @param systemParam   系统参数
+     * @param order_id      订单号
+     * @param reply_id      回复ID
+     * @param reply_content 回复内容
+     * @param remind_id     催单id
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderRemindReply(SystemParam systemParam, String order_id, Integer reply_id,
+                                   String reply_content, Long remind_id) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderRemindReply, systemParam, order_id, reply_id, reply_content, remind_id);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        applicationParamsMap.put("reply_id", String.valueOf(reply_id));
+        applicationParamsMap.put("reply_content", reply_content);
+        applicationParamsMap.put("remind_id", String.valueOf(remind_id));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderRemindReply);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 查询可申请餐损赔付的订单
+     *
+     * @param systemParam  系统参数
+     * @param app_poi_code 门店编号
+     * @param offset       偏移量
+     * @param limit        条数
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderGetSupportedCompensation(SystemParam systemParam, String app_poi_code, Integer offset, Integer limit) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetSupportedCompensation, systemParam, app_poi_code, offset, limit);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", app_poi_code);
+        applicationParamsMap.put("offset", String.valueOf(offset));
+        applicationParamsMap.put("limit", String.valueOf(limit));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetSupportedCompensation);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 申请餐损赔付
+     *
+     * @param systemParam  系统参数
+     * @param order_id     订单编号
+     * @param apply_status 赔付状态
+     * @param amount       金额
+     * @param reason       赔付原因
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderApplyCompensation(SystemParam systemParam, String order_id, Integer apply_status, Double amount, String reason) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderApplyCompensation, systemParam, order_id, apply_status, amount, reason);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        applicationParamsMap.put("apply_status", String.valueOf(apply_status));
+        applicationParamsMap.put("amount", String.valueOf(amount));
+        applicationParamsMap.put("reason", reason);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderApplyCompensation);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 查询餐损赔付结果
+     *
+     * @param systemParam 系统参数
+     * @param order_id    订单编号
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderGetCompensationResult(SystemParam systemParam, String order_id) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetCompensationResult, systemParam, order_id);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetCompensationResult);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 隐私号拉取接口
+     *
+     * @param systemParam  系统参数
+     * @param app_poi_code 门店编号
+     * @param offset       偏移量
+     * @param limit        条数
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderBatchPullPhoneNumber(SystemParam systemParam, String app_poi_code, Integer offset, Integer limit) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderBatchPullPhoneNumber, systemParam, app_poi_code, offset, limit);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("app_poi_code", app_poi_code);
+        applicationParamsMap.put("offset", String.valueOf(offset));
+        applicationParamsMap.put("limit", String.valueOf(limit));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderBatchPullPhoneNumber);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 商家确认已完成出餐
+     *
+     * @param systemParam 系统参数
+     * @param order_id    订单编号
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderPreparationMealComplete(SystemParam systemParam, String order_id) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderPreparationMealComplete, systemParam, order_id);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderPreparationMealComplete);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 商家获取备餐时间
+     *
+     * @param systemParam 系统参数
+     * @param order_id    订单编号
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderGetPreparationMealTime(SystemParam systemParam, String order_id) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderGetPreparationMealTime, systemParam, order_id);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderGetPreparationMealTime);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+
+    /**
+     * 批量拉取异常订单
+     *
+     * @param systemParam 系统参数
+     * @param type         异常订单类型
+     * @param start_time   开始时间
+     * @param end_time     结束时间
+     * @param offset       偏移量
+     * @param limit        条数
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderBatchFetchAbnormalOrder(SystemParam systemParam, Integer type, Integer start_time, Integer end_time, Integer offset, Integer limit) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderBatchFetchAbnormalOrder, systemParam, type, start_time, end_time, offset, limit);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("type", String.valueOf(type));
+        applicationParamsMap.put("start_time", String.valueOf(start_time));
+        applicationParamsMap.put("end_time", String.valueOf(end_time));
+        applicationParamsMap.put("offset", String.valueOf(offset));
+        applicationParamsMap.put("limit", String.valueOf(limit));
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderBatchFetchAbnormalOrder);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
+    /**
+     * 订单转自配
+     *
+     * @param systemParam 系统参数
+     * @param order_id    订单编号
+     * @return
+     * @throws ApiOpException
+     * @throws ApiSysException
+     */
+    public String orderChangeToPoiSelfShipping(SystemParam systemParam, String order_id) throws
+            ApiOpException, ApiSysException {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        beforeMethod(ParamRequiredEnum.OrderChangeToPoiSelfShipping, systemParam, order_id);
+        //组织应用级参数
+        Map<String, String> applicationParamsMap = new HashMap<>();
+        applicationParamsMap.put("order_id", order_id);
+        beforeMethod(systemParam, applicationParamsMap, ParamRequiredEnum.OrderChangeToPoiSelfShipping);
+
+        return requestApi(methodName, systemParam, applicationParamsMap);
+    }
 }

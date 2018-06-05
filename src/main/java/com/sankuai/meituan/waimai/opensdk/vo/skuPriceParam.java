@@ -4,22 +4,32 @@ package com.sankuai.meituan.waimai.opensdk.vo;
  * Created by zhangzhidong on 15/10/28.
  */
 public class skuPriceParam {
-    String sku_id;
-    String price;
+    private String sku_id;
+    private String price;
 
     public String getSku_id() {
         return sku_id;
     }
 
-    public void setSku_id(String sku_id) {
+    public skuPriceParam setSku_id(String sku_id) {
         this.sku_id = sku_id;
+        return this;
     }
 
     public String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public skuPriceParam setPrice(String price) {
         this.price = price;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "skuPriceParam [" +
+                "sku_id='" + sku_id + '\'' +
+                ", price='" + price + '\'' +
+                ']';
     }
 }
