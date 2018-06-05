@@ -7,7 +7,6 @@ import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import com.sankuai.meituan.waimai.opensdk.factory.URLFactory;
 import com.sankuai.meituan.waimai.opensdk.util.*;
 import com.sankuai.meituan.waimai.opensdk.vo.SystemParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,30 +23,55 @@ public class API {
 
     static Logger log = LoggerFactory.getLogger(API.class);
 
-    protected static String requestApi(String methodName,SystemParam systemParam,
-                                       Map<String,String> applicationParamsMap) throws
-                                                                                ApiOpException,
-                                                                                ApiSysException {
-        String urlPrefix = null;
-        String resultString = null;
-        String rs = null;
-        try{
+    protected static String requestApi(String methodName, SystemParam systemParam, Map<String, String> applicationParamsMap) throws ApiOpException,
+            ApiSysException {
+        return requestApi(methodName, systemParam, applicationParamsMap, false);
+    }
+
+    protected static String requestApi(String methodName, SystemParam systemParam, Map<String, String> applicationParamsMap, boolean partSuccess)
+            throws ApiOpException, ApiSysException {
         //组织系统级参数
-        Map<String,String> systemParamsMap = ConvertUtil.convertSystemParamsToMap(systemParam);
-        String urlForGenSig = URLFactory.genUrlForGenSig(methodName, systemParamsMap,
-                                                         applicationParamsMap);
+        Map<String, String> systemParamsMap = ConvertUtil.convertSystemParamsToMap(systemParam);
+        String urlForGenSig = URLFactory.genUrlForGenSig(methodName, systemParamsMap, applicationParamsMap);
         //生成签名
         String sig = SignGenerator.genSig(urlForGenSig);
         //去掉scret的url
         String urlNoSig = urlForGenSig.replaceAll(systemParam.getAppSecret(), "");
-        urlPrefix = URLFactory.genUrlPrefix(methodName);
-        resultString = HttpUtil.request(urlPrefix,
-                                               genUrlForGetRequest(urlPrefix, systemParamsMap, applicationParamsMap),
-                                               sig, systemParamsMap, applicationParamsMap,
-                                               URLFactory.genUrlType(methodName),
-                                               PropertiesUtil.getRequestConfig());
+        String urlPrefix = URLFactory.genUrlPrefix(methodName);
+        String resultString = HttpUtil.request(urlPrefix,
+                genUrlForGetRequest(urlPrefix, systemParamsMap, applicationParamsMap),
+                sig,
+                systemParamsMap,
+                applicationParamsMap,
+                URLFactory.genUrlType(methodName),
+                PropertiesUtil.getRequestConfig());
 
-        rs = HttpUtil.httpResultHandler(resultString);
+        return HttpUtil.httpResultHandler(resultString, partSuccess);
+    }
+
+    protected static String requestApi(String methodName, SystemParam systemParam,
+                                       Map<String, String> applicationParamsMap, byte[] fileData, String imgName) throws
+            ApiOpException,
+            ApiSysException {
+        //组织应用级参数
+        Map<String, String> systemParamsMap = ConvertUtil.convertSystemParamsToMap(systemParam);
+        String urlForGenSig = URLFactory.genUrlForGenSig(methodName, systemParamsMap,
+                applicationParamsMap);
+        //生成签名
+        String sig = SignGenerator.genSig(urlForGenSig);
+        //去掉scret的url
+        String urlNoSig = urlForGenSig.replaceAll(systemParam.getAppSecret(), "");
+
+        String urlPrefix = URLFactory.genUrlPrefix(methodName);
+        String resultString = HttpUtil.request(urlPrefix,
+                genUrlForGetRequest(urlPrefix, systemParamsMap, applicationParamsMap),
+                sig, systemParamsMap, applicationParamsMap, fileData, imgName,
+                URLFactory.genUrlType(methodName),
+                PropertiesUtil.getRequestConfig());
+
+        String rs="";
+        try {
+            rs = HttpUtil.httpResultHandler(resultString);
         } finally {
             log.info("MTBEG****************************************************************************");
             log.info("MT* 美团外卖接口调用:{} AppId:{} Url:{}",methodName,systemParam.getAppId(),urlPrefix);
@@ -59,130 +83,13 @@ public class API {
         return rs;
     }
 
-    protected static String requestApi(String methodName,SystemParam systemParam,
-                                       Map<String,String> applicationParamsMap, byte[] fileData, String imgName) throws
-                                                                                ApiOpException,
-                                                                                ApiSysException {
-        //组织应用级参数
-        Map<String,String> systemParamsMap = ConvertUtil.convertSystemParamsToMap(systemParam);
-        String urlForGenSig = URLFactory.genUrlForGenSig(methodName, systemParamsMap,
-                                                         applicationParamsMap);
-        //生成签名
-        String sig = SignGenerator.genSig(urlForGenSig);
-        //去掉scret的url
-        String urlNoSig = urlForGenSig.replaceAll(systemParam.getAppSecret(), "");
-
-        String urlPrefix = URLFactory.genUrlPrefix(methodName);
-        String resultString = HttpUtil.request(urlPrefix,
-                                               genUrlForGetRequest(urlPrefix, systemParamsMap, applicationParamsMap),
-                                               sig, systemParamsMap, applicationParamsMap, fileData, imgName,
-                                               URLFactory.genUrlType(methodName),
-                                               PropertiesUtil.getRequestConfig());
-
-        return HttpUtil.httpResultHandler(resultString);
-    }
-
-    protected void beforeMethod(ParamRequiredEnum paramRequiredEnum,Object... targetObjects) throws ApiSysException, ApiOpException {
-        List<String> requiredParamList = null;
-        if(paramRequiredEnum != null){
-            requiredParamList = ParamRequiredEnum.getParams(paramRequiredEnum);
-        }
-        if(targetObjects != null){
-            for(Object targetObject : targetObjects){
-                if(Enum.class == targetObject.getClass()){
-                    if(targetObject == null){
-                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                    }
-                }else if(String.class == targetObject.getClass()){
-                    if(targetObject == null){
-                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                    }
-                }else if(SystemParam.class == targetObject.getClass()){
-                    SystemParam systemParam = (SystemParam) targetObject;
-                    if(StringUtil.isBlank(systemParam.getAppId()) || StringUtil.isBlank(systemParam.getAppSecret())){
-                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                    }
-                }else {
-                    Field[] fields = targetObject.getClass().getDeclaredFields();
-                    for (Field field : fields){
-                        field.setAccessible(true);
-                        String fieldName = field.getName();
-                        if(requiredParamList != null && !"null".equals(requiredParamList) &&
-                           !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
-                            requiredParamList.contains(fieldName)){
-                            try {
-                                Object value = field.get(targetObject);
-                                if(value == null){
-                                    throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                                }
-                            } catch (IllegalAccessException e) {
-                                throw new ApiSysException("参数校验异常",e);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected void beforeMethod(Object targetObject1 , Map<String, String> paramMap, ParamRequiredEnum paramRequiredEnum) throws ApiSysException, ApiOpException {
-        List<String> requiredParamList = ParamRequiredEnum.getParams(paramRequiredEnum);
-        if(targetObject1 != null){
-            Field[] fields = targetObject1.getClass().getDeclaredFields();
-            for (Field field : fields){
-                field.setAccessible(true);
-                String fieldName = field.getName();
-                if(requiredParamList != null && !"null".equals(requiredParamList) &&
-                   !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
-                   requiredParamList.contains(fieldName)){
-                    try {
-                        Object value = field.get(targetObject1);
-                        if(value == null){
-                            throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                        }
-                    } catch (IllegalAccessException e) {
-                        throw new ApiSysException("参数校验异常", e);
-                    }
-                }
-            }
-        }
-        if(paramMap != null && !paramMap.isEmpty()){
-            if(requiredParamList != null && !"null".equals(requiredParamList) &&
-                    !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() && paramMap.size() < requiredParamList.size()){
-                throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-            }
-            for (String key : paramMap.keySet()){
-                if(requiredParamList != null && !"null".equals(requiredParamList) &&
-                !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
-                requiredParamList.contains(key)){
-                    Object value = paramMap.get(key);
-                    if(value == null){
-                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                    }
-                }
-            }
-        }
-        if (requiredParamList != null && !"null".equals(requiredParamList) &&
-                !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty()) {
-            if(paramMap != null && !paramMap.isEmpty() && paramMap.size() < requiredParamList.size()){
-                throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-            }
-            for (String requiredParam : requiredParamList) {
-                if (!paramMap.containsKey(requiredParam) || paramMap.get(requiredParam) == null) {
-                    throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
-                }
-            }
-        }
-    }
-
-    protected static String genUrlForGetRequest(String urlPrefix, Map<String,String> systemParamsMap, Map<String, String> applicationParamsMap) throws ApiOpException{
-        String uriParamStr = "";
-        uriParamStr += "app_id=" + systemParamsMap.get("app_id") + "&timestamp="
-                       + systemParamsMap.get("timestamp");
+    protected static String genUrlForGetRequest(String urlPrefix, Map<String, String> systemParamsMap, Map<String, String> applicationParamsMap)
+            throws ApiOpException {
+        String uriParamStr = "app_id=" + systemParamsMap.get("app_id") + "&timestamp=" + systemParamsMap.get("timestamp");
         if (applicationParamsMap != null && !"null".equals(applicationParamsMap) && !"NULL".equals(applicationParamsMap)) {
             for (String key : applicationParamsMap.keySet()) {
                 String val = applicationParamsMap.get(key);
-                if (val != null && !"".equals(val) && !"null".equals(val) && !"NULL".equals(val)) {
+                if (val != null) {
                     try {
                         key = URLEncoder.encode(key, "UTF-8");
                         val = URLEncoder.encode(val, "UTF-8");
@@ -195,5 +102,99 @@ public class API {
         }
         String basedUrl = urlPrefix + "?" + uriParamStr;
         return basedUrl;
+    }
+
+    protected void beforeMethod(ParamRequiredEnum paramRequiredEnum, Object... targetObjects) throws ApiSysException, ApiOpException {
+        List<String> requiredParamList = null;
+        if (paramRequiredEnum != null) {
+            requiredParamList = ParamRequiredEnum.getParams(paramRequiredEnum);
+        }
+        if (targetObjects != null) {
+            for (Object targetObject : targetObjects) {
+                if (Enum.class == targetObject.getClass()) {
+                    if (targetObject == null) {
+                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                    }
+                } else if (String.class == targetObject.getClass()) {
+                    if (targetObject == null) {
+                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                    }
+                } else if (SystemParam.class == targetObject.getClass()) {
+                    SystemParam systemParam = (SystemParam) targetObject;
+                    if (StringUtil.isBlank(systemParam.getAppId()) || StringUtil.isBlank(systemParam.getAppSecret())) {
+                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                    }
+                } else {
+                    Field[] fields = targetObject.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+                        String fieldName = field.getName();
+                        if (requiredParamList != null && !"null".equals(requiredParamList) &&
+                                !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
+                                requiredParamList.contains(fieldName)) {
+                            try {
+                                Object value = field.get(targetObject);
+                                if (value == null) {
+                                    throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                                }
+                            } catch (IllegalAccessException e) {
+                                throw new ApiSysException("参数校验异常", e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected void beforeMethod(Object targetObject1, Map<String, String> paramMap, ParamRequiredEnum paramRequiredEnum) throws ApiSysException,
+            ApiOpException {
+        List<String> requiredParamList = ParamRequiredEnum.getParams(paramRequiredEnum);
+        if (targetObject1 != null) {
+            Field[] fields = targetObject1.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                String fieldName = field.getName();
+                if (requiredParamList != null && !"null".equals(requiredParamList) &&
+                        !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
+                        requiredParamList.contains(fieldName)) {
+                    try {
+                        Object value = field.get(targetObject1);
+                        if (value == null) {
+                            throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new ApiSysException("参数校验异常", e);
+                    }
+                }
+            }
+        }
+        if (paramMap != null && !paramMap.isEmpty()) {
+            if (requiredParamList != null && !"null".equals(requiredParamList) &&
+                    !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() && paramMap.size() < requiredParamList.size()) {
+                throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+            }
+            for (String key : paramMap.keySet()) {
+                if (requiredParamList != null && !"null".equals(requiredParamList) &&
+                        !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty() &&
+                        requiredParamList.contains(key)) {
+                    Object value = paramMap.get(key);
+                    if (value == null) {
+                        throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                    }
+                }
+            }
+        }
+        if (requiredParamList != null && !"null".equals(requiredParamList) &&
+                !"NULL".equals(requiredParamList) && !requiredParamList.isEmpty()) {
+            if (paramMap != null && !paramMap.isEmpty() && paramMap.size() < requiredParamList.size()) {
+                throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+            }
+            for (String requiredParam : requiredParamList) {
+                if (!paramMap.containsKey(requiredParam) || paramMap.get(requiredParam) == null) {
+                    throw new ApiSysException(ErrorEnum.LACK_OF_PARAM);
+                }
+            }
+        }
     }
 }
