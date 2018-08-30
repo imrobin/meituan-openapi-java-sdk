@@ -7,8 +7,8 @@ public class ActDiscountParam {
 
     private String app_food_code;
     private Integer user_type;
-    private Integer start_time;
-    private Integer end_time;
+    private Long start_time;
+    private Long end_time;
     private Double act_price;
     private Integer order_limit;
     private Integer day_limit;
@@ -36,19 +36,19 @@ public class ActDiscountParam {
         this.user_type = user_type;
     }
 
-    public Integer getStart_time() {
+    public Long getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Integer start_time) {
+    public void setStart_time(Long start_time) {
         this.start_time = start_time;
     }
 
-    public Integer getEnd_time() {
+    public Long getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Integer end_time) {
+    public void setEnd_time(Long end_time) {
         this.end_time = end_time;
     }
 

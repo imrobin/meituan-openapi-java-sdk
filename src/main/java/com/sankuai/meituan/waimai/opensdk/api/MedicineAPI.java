@@ -139,13 +139,24 @@ public class MedicineAPI extends API {
     }
 
     /**
-     *  批量新建药品
+     *  批量新建药品（已废弃）
      *  @param systemParam 系统参数, 必填
      *  @param appPoiCode 门店code, 必填
      *  @param medicineParams 药品参数, 必填
      */
+    @Deprecated
     public String medicineBatchsave(SystemParam systemParam, String appPoiCode, List<MedicineParam> medicineParams)
                                            throws ApiOpException, ApiSysException{
+        return medicineBatchSave(systemParam,appPoiCode,medicineParams);
+    }
+    /**
+     *  批量新建药品（替换原有的medicineBatchsave）
+     *  @param systemParam 系统参数, 必填
+     *  @param appPoiCode 门店code, 必填
+     *  @param medicineParams 药品参数, 必填
+     */
+    public String medicineBatchSave(SystemParam systemParam, String appPoiCode, List<MedicineParam> medicineParams)
+            throws ApiOpException, ApiSysException{
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         beforeMethod(ParamRequiredEnum.MedicineBatchSave,systemParam, appPoiCode, JSONObject.toJSONString(medicineParams));
@@ -160,12 +171,24 @@ public class MedicineAPI extends API {
     }
 
     /**
-     *  批量更新药品
+     *  批量更新药品(已废弃)
      *  @param systemParam 系统参数, 必填
      *  @param appPoiCode 门店code, 必填
      *  @param medicineParams 药品参数, 必填
      */
+    @Deprecated
     public String medicineBatchupdate(SystemParam systemParam, String appPoiCode, List<MedicineParam> medicineParams)
+            throws ApiOpException, ApiSysException{
+        return medicineBatchUpdate(systemParam,appPoiCode,medicineParams);
+
+    }
+    /**
+     *  批量更新药品（替换原有的medicineBatchupdate）
+     *  @param systemParam 系统参数, 必填
+     *  @param appPoiCode 门店code, 必填
+     *  @param medicineParams 药品参数, 必填
+     */
+    public String medicineBatchUpdate(SystemParam systemParam, String appPoiCode, List<MedicineParam> medicineParams)
             throws ApiOpException, ApiSysException{
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 

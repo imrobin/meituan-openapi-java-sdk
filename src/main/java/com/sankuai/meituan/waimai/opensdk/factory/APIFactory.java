@@ -12,6 +12,7 @@ public class APIFactory {
     private static ShippingAPI shippingAPI = new ShippingAPI();
     private static FoodAPI foodAPI = new FoodAPI();
     private static MedicineAPI medicineAPI = new MedicineAPI();
+    private static NewRetailApi newRetailApi = new NewRetailApi();
     private static RetailApi retailApi = new RetailApi();
     private static ActApi actApi = new ActApi();
     private static OrderAPI orderAPI = new OrderAPI();
@@ -31,6 +32,10 @@ public class APIFactory {
 
     public static MedicineAPI getMedicineAPI() {
         return medicineAPI;
+    }
+
+    public static NewRetailApi getNewRetailApi() {
+        return newRetailApi;
     }
 
     public static RetailApi getRetailApi() {

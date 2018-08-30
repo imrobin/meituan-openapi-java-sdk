@@ -82,6 +82,16 @@ public enum ParamRequiredEnum {
     UpdateRetailSkuPrice("app_poi_code, food_data"),
     UpdateRetailSkuStock("app_poi_code, food_data"),
     RetailGet("app_poi_code, app_food_code"),
+    RetailSkuSave("app_poi_code, app_food_code"),
+    RetailSkuSaveWithStandardSku("sku_id,price,stock"),
+    RetailSkuSaveWithUnStandardSku("sku_id,spec,price,stock"),
+    RetailPropertyList("app_poi_code, app_food_code"),
+    RetailSkuSellStatus("app_poi_code, food_data, sell_status"),
+    RetailDelete("app_poi_code, app_food_code"),
+    RetailBindProperty("app_poi_code, food_property"),
+    RetailSkuDelete("app_poi_code, app_food_code, sku_id"),
+    RetailBatchInitDataByUpc("app_poi_code,food_data"),
+    RetailGetSpTagIds(""),
 
 
     //活动
@@ -90,14 +100,22 @@ public enum ParamRequiredEnum {
     ActDiscountStock("app_poi_code, act_data"),
     ActDiscountList("app_poi_code, offset, limit"),
     ActDiscountActivityOrderLimit("app_poi_code, activity_order_limit"),
-
+    ActSecondHalfBatchSave("app_poi_code, act_data"),
+    ActSecondHalfDelete("app_poi_code, app_food_codes"),
+    ActSecondHalfStock("app_poi_code, act_data"),
+    ActSecondHalfList("app_poi_code, offset, limit"),
+    ActBuyGiftsBatchSave("app_poi_code, act_data"),
+    ActBuyGiftsDelete("app_poi_code, item_ids"),
+    ActBuyGiftsStock("app_poi_code, act_data"),
+    ActBuyGiftsList("app_poi_code, offset, limit"),
     ActFullDiscountBatchSave("app_poi_code, act_info, act_details, app_foods"),
     ActFullDiscountList("app_poi_code"),
     ActFullDiscountDelete("app_poi_code, act_ids"),
     ActFullDiscountFoodsBatchSave("app_poi_code, act_id, app_foods"),
     ActFullDiscountFoodsList("app_poi_code, act_id, offset, limit"),
-    ActFullDiscountFoodsDelete("app_poi_code, act_id, app_foods"),
-    ActFullDiscountFoodsBatchUpdateDayLimit("app_poi_code, act_id, app_foods"),
+    ActFullDiscountFoodsDelete("app_poi_code, act_id, app_food_codes"),
+    ActFullDiscountFoodsDayLimit("app_poi_code, act_id, app_foods"),
+
 
 
     //订单
@@ -147,15 +165,15 @@ public enum ParamRequiredEnum {
         this.paramNames = paramNames;
     }
 
-    public String getParamNames(){
+    public String getParamNames() {
         return paramNames;
     }
 
-    public static List<String> getParams(ParamRequiredEnum paramRequiredEnum){
+    public static List<String> getParams(ParamRequiredEnum paramRequiredEnum) {
         String paramNames = paramRequiredEnum.getParamNames();
         List<String> paramNameListTemp = Arrays.asList(paramNames.split(","));
         List<String> paramNameList = new ArrayList<>();
-        for(String paramName : paramNameListTemp){
+        for (String paramName : paramNameListTemp) {
             paramNameList.add(paramName.trim());
         }
         return paramNameList;

@@ -18,6 +18,7 @@ import java.util.Map;
 /**
  * Created by songxu on 2017/08/04.
  */
+@Deprecated
 public class RetailApi extends API {
 
     /**

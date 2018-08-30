@@ -164,6 +164,14 @@ public class URLFactory {
         urlMap.put("updateRetailSkuPrice","retail/sku/price");
         urlMap.put("updateRetailSkuStock","retail/sku/stock");
         urlMap.put("retailGet","retail/get");
+        urlMap.put("retailSkuSave","retail/sku/save");
+        urlMap.put("retailPropertyList","retail/property/list");
+        urlMap.put("retailSkuSellStatus","retail/sku/sellStatus");
+        urlMap.put("retailDelete","retail/delete");
+        urlMap.put("retailBindProperty","retail/bind/property");
+        urlMap.put("retailSkuDelete","retail/sku/delete");
+        urlMap.put("retailBatchInitDataByUpc","retail/batchinitdatabyupc");
+        urlMap.put("retailGetSpTagIds","retail/getSpTagIds");
 
         urlTypeMap.put("retailCatUpdate","POST");
         urlTypeMap.put("retailCatDelete","POST");
@@ -175,6 +183,14 @@ public class URLFactory {
         urlTypeMap.put("updateRetailSkuPrice","POST");
         urlTypeMap.put("updateRetailSkuStock","POST");
         urlTypeMap.put("retailGet","GET");
+        urlTypeMap.put("retailSkuSave","POST");
+        urlTypeMap.put("retailPropertyList","GET");
+        urlTypeMap.put("retailSkuSellStatus","POST");
+        urlTypeMap.put("retailDelete","POST");
+        urlTypeMap.put("retailBindProperty","POST");
+        urlTypeMap.put("retailSkuDelete","POST");
+        urlTypeMap.put("retailBatchInitDataByUpc","POST");
+        urlTypeMap.put("retailGetSpTagIds","GET");
 
 
         // 活动
@@ -184,28 +200,43 @@ public class URLFactory {
         urlMap.put("actDiscountStock","act/discount/stock");
         urlMap.put("actDiscountList","act/discount/list");
         urlMap.put("actDiscountActivityOrderLimit","act/discount/activity_order_limit");
+        urlMap.put("actSecondHalfBatchSave","act/second/half/batchsave");
+        urlMap.put("actSecondHalfDelete","act/second/half/delete");
+        urlMap.put("actSecondHalfStock","act/second/half/stock");
+        urlMap.put("actSecondHalfList","act/second/half/list");
+        urlMap.put("actBuyGiftsBatchSave","act/buygifts/batchsave");
+        urlMap.put("actBuyGiftsDelete","act/buygifts/delete");
+        urlMap.put("actBuyGiftsStock","act/buygifts/stock");
+        urlMap.put("actBuyGiftsList","act/buygifts/list");
+        urlMap.put("actFullDiscountBatchSave","act/full/discount/batchsave");
+        urlMap.put("actFullDiscountList","act/full/discount/list");
+        urlMap.put("actFullDiscountDelete","act/full/discount/delete");
+        urlMap.put("actFullDiscountFoodsBatchSave","act/full/discount/foods/batchsave");
+        urlMap.put("actFullDiscountFoodsList","act/full/discount/foods/list");
+        urlMap.put("actFullDiscountFoodsDelete","act/full/discount/foods/delete");
+        urlMap.put("actFullDiscountFoodsDayLimit","act/full/discount/foods/daylimit");
+
 
         urlTypeMap.put("actDiscountBatchSave","POST");
         urlTypeMap.put("actDiscountDelete","POST");
         urlTypeMap.put("actDiscountStock","POST");
         urlTypeMap.put("actDiscountList","GET");
         urlTypeMap.put("actDiscountActivityOrderLimit","POST");
-
-        urlMap.put("fullDiscountBatchSave","act/full/discount/batchsave");
-        urlMap.put("fullDiscountList","act/full/discount/list");
-        urlMap.put("fullDiscountDelete","act/full/discount/delete");
-        urlMap.put("fullDiscountFoodsBatchSave","act/full/discount/foods/batchsave");
-        urlMap.put("fullDiscountFoodsList","act/full/discount/foods/list");
-        urlMap.put("fullDiscountFoodsDelete","act/full/discount/foods/delete");
-        urlMap.put("fullDiscountFoodsBatchUpdateDayLimit","act/full/discount/foods/orderlimit");
-
-        urlTypeMap.put("fullDiscountBatchSave","POST");
-        urlTypeMap.put("fullDiscountList","POST");
-        urlTypeMap.put("fullDiscountDelete","POST");
-        urlTypeMap.put("fullDiscountFoodsBatchSave","POST");
-        urlTypeMap.put("fullDiscountFoodsList","POST");
-        urlTypeMap.put("fullDiscountFoodsDelete","POST");
-        urlTypeMap.put("fullDiscountFoodsBatchUpdateDayLimit","POST");
+        urlTypeMap.put("actSecondHalfBatchSave","POST");
+        urlTypeMap.put("actSecondHalfDelete","POST");
+        urlTypeMap.put("actSecondHalfStock","POST");
+        urlTypeMap.put("actSecondHalfList","GET");
+        urlTypeMap.put("actBuyGiftsBatchSave","POST");
+        urlTypeMap.put("actBuyGiftsDelete","POST");
+        urlTypeMap.put("actBuyGiftsStock","POST");
+        urlTypeMap.put("actBuyGiftsList","GET");
+        urlTypeMap.put("actFullDiscountBatchSave","POST");
+        urlTypeMap.put("actFullDiscountList","POST");
+        urlTypeMap.put("actFullDiscountDelete","POST");
+        urlTypeMap.put("actFullDiscountFoodsBatchSave","POST");
+        urlTypeMap.put("actFullDiscountFoodsList","POST");
+        urlTypeMap.put("actFullDiscountFoodsDelete","POST");
+        urlTypeMap.put("actFullDiscountFoodsDayLimit","POST");
 
 
         //订单
@@ -299,7 +330,7 @@ public class URLFactory {
             if("0".equals(env)){
                 urlPrefix = "http://test.waimaiopen.meituan.com/api/v1/";
             }else if("1".equals(env)){
-                urlPrefix = "http://waimaiopen.meituan.com/api/v1/";
+                urlPrefix = "https://waimaiopen.meituan.com/api/v1/";
             }else if("2".equals(env)){
                 urlPrefix = "http://127.0.0.1:9000/api/v1/";
             }

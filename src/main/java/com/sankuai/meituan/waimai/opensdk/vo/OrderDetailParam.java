@@ -72,7 +72,7 @@ public class OrderDetailParam {
     private Long wm_poi_id;
     private String wm_poi_name;
     private String wm_poi_phone;
-
+    private Integer package_bag_money;          //打包袋金额（该字段默认不返回，可在开发者中心订阅）
     public String getApp_order_code() {
         return app_order_code;
     }
@@ -601,6 +601,14 @@ public class OrderDetailParam {
         this.wm_poi_phone = wm_poi_phone;
     }
 
+    public Integer getPackage_bag_money() {
+        return package_bag_money;
+    }
+
+    public void setPackage_bag_money(Integer package_bag_money) {
+        this.package_bag_money = package_bag_money;
+    }
+
     @Override
     public String toString() {
         return "OrderDetailParam [" +
@@ -670,6 +678,7 @@ public class OrderDetailParam {
                 ", wm_poi_id=" + wm_poi_id +
                 ", wm_poi_name='" + wm_poi_name + '\'' +
                 ", wm_poi_phone='" + wm_poi_phone + '\'' +
+                ", package_bag_money='" + package_bag_money + '\'' +
                 ']';
     }
 }
